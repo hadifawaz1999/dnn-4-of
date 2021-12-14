@@ -1,5 +1,11 @@
 import numpy as np
+from numpy.core.defchararray import count
+from data import DataGenerator
 import matplotlib.pyplot as plt
+
+# Test Draw Constellation
+
+'''
 points = [-3, -1, 1, 3]
 
 const1 = np.asarray([[i, 3] for i in points])
@@ -33,3 +39,22 @@ for i in range(16):
                      xy=(Constellation[i,0],Constellation[i,1]),ha='center',va='center',
                      xytext=(Constellation[i,0],Constellation[i,1]+0.2))
 plt.show()
+
+'''
+
+# Test Bernoulli
+
+
+dg = DataGenerator()
+
+dg.source(N=16,p=0.5)
+
+# a=dg.bernoulli
+# print(a)
+# print(sum(a[a==1]),1024-sum(a[a==1]))
+
+dg.bit_to_symb()
+
+print(dg.bernoulli)
+s = dg.s
+print(s)
