@@ -20,14 +20,16 @@ ax.spines['bottom'].set_position('center')
 ax.spines['right'].set_color('none')
 ax.spines['top'].set_color('none')
 
+plt.title('16-QAM constellation', pad = 20)
+
 for i in range(16):
     plt.scatter(Constellation[i,0],Constellation[i,1],color='red')
     if Constellation[i,1] > 0:
-        plt.annotate(str(Constellation[i,0])+' + j'+str(Constellation[i,1]),
-                     (Constellation[i,0],Constellation[i,1]),
+        plt.annotate(text=str(Constellation[i,0])+' + j'+str(Constellation[i,1]),
+                     xy=(Constellation[i,0],Constellation[i,1]),
                      xytext=(Constellation[i,0],Constellation[i,1]+0.2))
     else:
-        plt.annotate(s=str(Constellation[i,0])+' - j'+str(abs(Constellation[i,1])),
+        plt.annotate(text=str(Constellation[i,0])+' - j'+str(abs(Constellation[i,1])),
                      xy=(Constellation[i,0],Constellation[i,1]),ha='center',va='center',
                      xytext=(Constellation[i,0],Constellation[i,1]+0.2))
 plt.show()
