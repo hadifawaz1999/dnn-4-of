@@ -81,6 +81,29 @@ class DataGenerator:
 
             self.s.append(self.gray_to_symb[b_i])
         
+        self.s = np.asarray(self.s)
+
+    def mod(self,t):
+        
+        Ns = len(self.s)
+        
+        self.l1 = -floor(Ns / 2)
+        
+        self.l2 = ceil(Ns/2) - 1
+        
+        self.q0t_list = []
+        
+        for i in range(self.l1,self.l2+1,1):
+            
+            self.q0t_list.append(sqrt(self.Bandwith) * complex(self.s[i - self.l1,0],self.s[i - self.l1,1]) *\
+                                 np.sinc(self.Bandwith * t - i))
+        
+        self.q0t_list = np.asarray(self.q0t_list)
+        
+        self.q0t = np.sum(self.q0t_list,axis=0)
+        
+        
+        
 
 
     def draw_Constellation(self):
