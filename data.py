@@ -1,15 +1,16 @@
 from math import *
 import numpy as np
 import matplotlib.pyplot as plt
+import scipy
 
 
 class DataGenerator:
 
     def __init__(self, Length=1e6, Bandwith=5, power_loss_db=0.2*1e-3, dispersion=17*1e-3, Gamma=1.27*1e-3,
-                 nsp=1, h=6.626*1e-34, lambda0=1.55*1e-6):
+                 nsp=1, h=6.626*1e-34, lambda0=1.55*1e-6,T=200,N=2**5,number_symbols=3,p=0.5):
 
         self.Length = Length
-        self.Bandwith = Bandwith
+        self.Bandwith = Bandwith # GHz to Hz
         self.power_loss_db = power_loss_db
         self.dispersion = dispersion
         self.Gamma = Gamma
@@ -26,6 +27,24 @@ class DataGenerator:
         self.sigma02 = self.nsp * self.h * self.alpha * self.f0
         self.sigma2 = (self.sigma02 * self.L0) / (self.P0 * self.T0)
         self.M = 16
+        
+        self.T = T
+        self.N = N
+        self.number_symbols = number_symbols # n in project guide
+        self.p = p # proba of having 0 in bit
+    
+        
+        self.dt = self.T / self.N
+
+        self.t = np.arange(start=-self.T/2,stop=self.T/2,step=self.dt)
+        
+        self.F = 1 / self.dt
+
+        self.df = 1 / self.T
+
+        self.f = np.arange(start=-self.F/2,stop=self.F/2,step=self.df)
+        
+        self.number_bits = self.number_symbols * int(log2(self.M)) # nb in guide
 
         # Constellation
 
@@ -42,12 +61,10 @@ class DataGenerator:
         self.Constellation = np.concatenate((np.concatenate((const1, const2), axis=0),
                                              np.concatenate((const3, const4), axis=0)), axis=0)
 
-    def source(self, N, p):
+    def source(self):
 
-        self.N = N
-        self.p = p
 
-        self.bernoulli = np.random.binomial(n=1, p=self.p, size=self.N)
+        self.bernoulli = np.random.binomial(n=1, p=self.p, size=self.number_bits)
 
         # return self.bernoulli
 
@@ -69,7 +86,7 @@ class DataGenerator:
         self.s = []
 
 
-        for i in range(0, self.N, 4):
+        for i in range(0, self.number_bits, 4):
             
             b0 = str(self.bernoulli[i])
             b1 = str(self.bernoulli[i+1])
@@ -83,7 +100,7 @@ class DataGenerator:
         
         self.s = np.asarray(self.s)
 
-    def mod(self,t):
+    def mod(self):
         
         Ns = len(self.s)
         
@@ -96,14 +113,31 @@ class DataGenerator:
         for i in range(self.l1,self.l2+1,1):
             
             self.q0t_list.append(sqrt(self.Bandwith) * complex(self.s[i - self.l1,0],self.s[i - self.l1,1]) *\
-                                 np.sinc(self.Bandwith * t - i))
+                                 np.sinc(self.Bandwith * self.t - i))
         
         self.q0t_list = np.asarray(self.q0t_list)
         
         self.q0t = np.sum(self.q0t_list,axis=0)
         
+        self.q0t_FFT = scipy.fft.fft(self.q0t)   
         
         
+    def plot_q0t(self):
+        
+        self.q0t_norm = [sqrt(self.q0t[i].real**2 + self.q0t[i].imag**2) for i in range(self.N)]
+
+        plt.plot(self.t,self.q0t_norm,color='black')
+        plt.ylabel(r'|q(0,t)|')
+        plt.xlabel(r'time')
+        plt.title('Norm of '+r'q(0,t)'+' vs time with Bandwith = '+str(self.Bandwith))
+        plt.savefig('./plots/norm_q0t.png')
+        plt.clf() 
+
+        plt.plot(self.f,self.q0t_FFT,color='red')
+        plt.xlabel(r'frequency')
+        plt.ylabel(r'FFT(q(0,t))')
+        plt.title(r'q(0,t)'+'in frequency domain with Bandwith = '+str(self.Bandwith))
+        plt.savefig('./plots/fft_q0t.png')
 
 
     def draw_Constellation(self):
