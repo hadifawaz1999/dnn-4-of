@@ -44,6 +44,8 @@ class DataGenerator:
 
         self.f = np.arange(start=-self.F/2,stop=self.F/2,step=self.df)
         
+        self.fft_frequencies = np.fft.fftfreq(n=self.N,d=self.dt)
+        
         self.number_bits = self.number_symbols * int(log2(self.M)) # nb in guide
 
         # Constellation
@@ -133,7 +135,9 @@ class DataGenerator:
         plt.savefig('./plots/norm_q0t.png')
         plt.clf() 
 
-        plt.plot(self.f,self.q0t_FFT,color='red')
+        self.fft_frequencies = np.fft.fftfreq(n=self.N,d=self.dt)
+        
+        plt.plot(self.fft_frequencies,np.abs(self.q0t_FFT),color='red')
         plt.xlabel(r'frequency')
         plt.ylabel(r'FFT(q(0,t))')
         plt.title(r'q(0,t)'+'in frequency domain with Bandwith = '+str(self.Bandwith))

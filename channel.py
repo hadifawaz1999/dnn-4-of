@@ -52,6 +52,8 @@ class Channel:
         self.sigma2 = self.data_generator.sigma2
 
         self.t = self.data_generator.t
+        
+        self.fft_frequencies = np.fft.fftfreq(n=self.N,d=self.data_generator.dt)
     
     def setter_function(self,q0t):
         
@@ -59,27 +61,16 @@ class Channel:
 
     def channel_transfer_function(self, z):
 
-        hzf = []
+        self.hzf = []
 
         for i in range(self.N):
 
-            hzf.append(np.exp(complex(0, np.square(2*pi*self.f[i])*z)))
+            self.hzf.append( np.exp( complex( 0, np.square( 2*pi*self.f[i] )*z ) ) )
 
-        hzf = np.asarray(hzf)
+        self.hzf = np.asarray(self.hzf)
 
-        return hzf
+        return self.hzf
     
-    def channel_inverse_transfer_function(self,z):
-        
-        hzf = self.channel_transfer_function(z)
-        
-        hzf_inverse = []
-        
-        for i in range(self.N):
-            
-            hzf_inverse.append(complex(0,-1) * np.ln(hzf[i]) / (2*pi*self.f[i])**2 )
-            
-        return hzf_inverse
 
     def channel(self, z):
 
@@ -88,10 +79,10 @@ class Channel:
 
         self.f = self.data_generator.f
 
-        self.q0f = self.data_generator.q0t_FFT
+        self.q0f = np.fft.fft(self.q0t)
 
         # Channel Transfer function
-        self.qzf = self.q0f * self.channel_transfer_function(z)
+        self.qzf = np.multiply(self.q0f, self.channel_transfer_function(z))
 
         # noise is an (N,) numpy array of complex valued Gaussian(0,sigma2) white noise
         # real part independent of imaginary part
@@ -100,9 +91,9 @@ class Channel:
                                     np.random.normal(loc=0, scale=self.a / 2, size=1))
                                     for _ in range(self.N)])
 
-        self.qzf += scipy.fft.fft(noise)
+        self.qzf += np.fft.fft(noise)
         
-        self.qzt = scipy.fft.ifft(self.qzf)
+        self.qzt = np.fft.ifft(self.qzf)
 
     def equilize(self,z):
         
@@ -110,6 +101,15 @@ class Channel:
         
         self.f = self.data_generator.f
         
-        self.qzfe = np.multiply(self.channel_inverse_transfer_function(z),self.qzf)
+        # self.qzfe = np.multiply(self.channel_inverse_transfer_function(z),self.qzf)
+        
+        self.qzfe = np.multiply(np.reciprocal(self.hzf),self.qzf)
         
         self.qzte = scipy.fft.ifft(self.qzfe)
+        
+    
+    def compare(self):
+        
+        self.difference = np.mean(np.abs(self.qzte-self.q0t))
+        
+        return self.difference < 1e-10
