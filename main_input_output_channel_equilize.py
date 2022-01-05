@@ -67,17 +67,25 @@ plt.savefig('plots/input_output_in_t_input_output_in_f.png')
 plt.clf()
 
 
-optic_fiber_channel.equilize(z=L)
+optic_fiber_channel.equalize(z=L)
 qlfe = optic_fiber_channel.qzfe
 qlte = optic_fiber_channel.qzte
 
 
 plt.figure(figsize=(20,10))
 plt.plot(t,q0t,label='input',color='red',lw=3)
-plt.plot(t,qlte,label='output equilizer',color='blue',lw=3)
+plt.plot(t,qlte,label='output equalizer',color='blue',lw=3)
 plt.legend()
-plt.savefig('plots/input_in_t_vs_output_equilizer_in_t.png')
+plt.savefig('plots/input_in_t_vs_output_equalizer_in_t.png')
 
 plt.clf()
 
 print(optic_fiber_channel.compare())
+
+
+optic_fiber_channel.dmod()
+
+shat = optic_fiber_channel.shat
+
+print(shat.shape)
+print(shat)
