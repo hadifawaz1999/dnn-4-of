@@ -3,7 +3,7 @@ from nnet_gen import Generative_Model
 from params import Params
 import numpy as np
 
-params = Params(N=2**8)
+params = Params(N=2**8,nz=1)
 dg = DataGenerator(N=2**8)
 
 dg.source()

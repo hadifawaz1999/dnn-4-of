@@ -18,6 +18,8 @@ optic_fiber_channel.dmod()
 optic_fiber_channel.detector()
 optic_fiber_channel.symb_to_bit()
 
+print(optic_fiber_channel.qzt)
+
 s_score , b_score = optic_fiber_channel.evaluate_results()
 
 print('s score : ',s_score)

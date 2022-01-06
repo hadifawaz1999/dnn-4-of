@@ -34,7 +34,7 @@ class Generative_Model:
         
         print(x * np.exp(1j*2*dz* np.sum(np.abs(x)**2)))
         
-        return x * np.exp(1j*2*dz* np.abs(x)**2)
+        return x * np.exp(1j*2*dz* np.sum(np.abs(x)**2))
     
     def nnet_generator(self,x):
         
