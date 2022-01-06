@@ -42,6 +42,10 @@ class Channel:
 
         )
         
+        self.constellation = self.data_generator.Constellation
+        self.Constellation = np.asarray([complex(self.constellation[i,0],
+                                                  self.constellation[i,1]) for i in range(self.M)])
+        
         self.number_bits = self.data_generator.number_bits
 
         self.data_generator.source()
@@ -65,19 +69,25 @@ class Channel:
         
         self.sigma2 = sigma2
 
-    def channel_transfer_function(self, z):
+    def channel_transfer_function(self, z=None):
+        
+        if z == None:
+            
+            z = self.Length
 
         self.hzf = np.exp(1j*(2*pi*self.fft_frequencies)**2 * z)
 
         return self.hzf
 
-    def channel(self, z):
+    def channel(self, z=None):
+        
+        if z == None:
+            
+            z = self.Length
 
         self.z = z
         self.a = self.sigma2 * self.Bandwith * self.z
-        
-        print(self.sigma2)
-        print(self.a)
+    
 
         self.f = self.data_generator.f
 
@@ -89,15 +99,19 @@ class Channel:
         # noise is an (N,) numpy array of complex valued Gaussian(0,sigma2) white noise
         # real part independent of imaginary part
 
-        noise = np.asarray([complex(np.random.normal(loc=0, scale=sqrt(self.a / 2), size=1),
-                                    np.random.normal(loc=0, scale=sqrt(self.a / 2), size=1))
-                            for _ in range(self.N)])
+        # noise = np.asarray([complex(np.random.normal(loc=0, scale=sqrt(self.a / 2), size=1),
+        #                             np.random.normal(loc=0, scale=sqrt(self.a / 2), size=1))
+        #                     for _ in range(self.N)])
 
-        self.qzf += np.fft.fft(noise)
+        self.qzf += np.random.normal(loc=0,scale=sqrt(self.a),size=self.N)
 
         self.qzt = np.fft.ifft(self.qzf)
 
-    def equalize(self, z):
+    def equalize(self, z=None):
+        
+        if z == None:
+            
+            z = self.Length
 
         self.z = z
 
@@ -105,7 +119,7 @@ class Channel:
 
         self.qzfe = np.multiply(np.reciprocal(self.hzf), self.qzf)
 
-        self.qzte = scipy.fft.ifft(self.qzfe)
+        self.qzte = np.fft.ifft(self.qzfe)
 
     def compare(self):
 
@@ -134,9 +148,6 @@ class Channel:
         
     def detector(self):
         
-        self.constellation = self.data_generator.Constellation
-        
-        self.Constellation = np.asarray([complex(self.constellation[i,0],self.constellation[i,1]) for i in range(self.M)])
         
         self.s_tilde = []
         
@@ -176,12 +187,18 @@ class Channel:
         
         self.b_string = []
         
-        for i in range(0, self.number_bits, 4):
+        b0=b1=b2=b3=""
+        
+        for i in range(0, self.number_bits, int(log2(self.M))):
             
             b0 = str(self.b[i])
-            b1 = str(self.b[i+1])
-            b2 = str(self.b[i+2])
-            b3 = str(self.b[i+3])
+            
+            if int(log2(self.M)) > 1:
+                b1 = str(self.b[i+1])
+                if int(log2(self.M)) > 2:
+                    b2 = str(self.b[i+2])
+                    if int(log2(self.M)) > 3:
+                        b3 = str(self.b[i+3])
             
             b_i = b0+b1+b2+b3
 
@@ -195,10 +212,9 @@ class Channel:
         
         score = 0
         
-        
         for i in range(len(a)):
             
-            for j in range(4):
+            for j in range(int(log2(self.M))):
                 
                 if str(a[i])[j] == str(b[i])[j]:
                     

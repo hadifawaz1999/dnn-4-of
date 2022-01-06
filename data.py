@@ -6,8 +6,8 @@ import scipy
 
 class DataGenerator:
 
-    def __init__(self, Length=1e3, Bandwith=5, power_loss_db=0.2*1e-3, dispersion=17*1e-3, Gamma=1.27*1e-3,
-                 nsp=1, h=6.626*1e-34, lambda0=1.55*1e-6,T=200,N=2**5,number_symbols=3,p=0.5,M=16):
+    def __init__(self, Length=1e3, Bandwith=6, power_loss_db=0.2*1e-3, dispersion=17*1e-3, Gamma=1.27*1e-3,
+                 nsp=1, h=6.626*1e-34, lambda0=1.55*1e-6, T=200, N=2**5, number_symbols=3, p=0.5,M=16,):
 
         self.Length = Length
         self.Bandwith = Bandwith # GHz to Hz
@@ -83,7 +83,7 @@ class DataGenerator:
         elif M == 8:
             
             self.Constellation = np.array([[-a,-a],[a,a],[-a,a],[a,-a],
-                                           [(1+sqrt(3))*a,0],[-(a+sqrt(3))*a,0],
+                                           [(a+sqrt(3))*a,0],[-(a+sqrt(3))*a,0],
                                            [0,(a+sqrt(3))*a],[0,-(a+sqrt(3))*a]])
     
     def source(self):
@@ -105,6 +105,7 @@ class DataGenerator:
         self.gray_code = np.asarray(self.gray_code)
         
         self.gray_to_symb = dict(zip(self.gray_code,self.Constellation))
+        
 
         self.s = []
 
@@ -115,15 +116,15 @@ class DataGenerator:
             
             b0 = str(self.bernoulli[i])
             
-            if self.M > 2:
+            if int(log2(self.M)) > 1:
                 
                 b1 = str(self.bernoulli[i+1])
                 
-                if self.M > 3:
+                if int(log2(self.M)) > 2:
                     
                     b2 = str(self.bernoulli[i+2])
                     
-                    if self.M > 7:
+                    if int(log2(self.M)) > 3:
                         
                         b3 = str(self.bernoulli[i+3])
             
