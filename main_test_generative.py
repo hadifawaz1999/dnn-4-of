@@ -3,7 +3,7 @@ from nnet_gen import Generative_Model
 from params import Params
 import numpy as np
 
-params = Params(N=2**8,nz=1)
+params = Params(N=2**8,nz=500)
 dg = DataGenerator(N=2**8)
 
 dg.source()
@@ -14,7 +14,7 @@ NNET_GEN = Generative_Model(params=params)
 
 x = dg.q0t
 
-x /= (np.sum(np.abs(x)**2))
+x /= np.sqrt((np.sum(np.abs(x)**2)))
 
 print(np.sum(np.abs(x)**2))
 

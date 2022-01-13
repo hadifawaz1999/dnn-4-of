@@ -47,7 +47,8 @@ class Generative_Model:
         
         h = np.exp(1j*w**2 * dz)
         
-        D = dft(n)
+        D = dft(n) / np.sqrt(n)
+        
         W = ((D.T).conjugate().dot(np.diag(h))).dot(D)
         
         for i in range(self.params.nz):
