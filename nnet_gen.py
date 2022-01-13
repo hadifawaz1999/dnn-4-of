@@ -3,6 +3,7 @@ from params import Params
 import numpy as np
 from math import *
 from scipy.linalg import dft
+import scipy
 
 class Generative_Model:
     
@@ -32,30 +33,39 @@ class Generative_Model:
         
         # return x * np.exp(1j*2*dz* (x.T).dot(x))
         
-        return x * np.exp(1j*2*dz* np.sum(np.abs(x)**2))
+        return x * np.exp(-1j*2*dz* np.abs(x)**2)
+        
+        # return x
     
     def nnet_generator(self,x):
         
         n = len(x)
         f = self.params.fft_frequencies
-        w = 2*pi*f
+        w = np.fft.fftshift(2*pi*self.params.f)
         
         z = self.params.Length
-        dz = z / self.params.nz
+        dz = 1 / self.params.nz
         
         h = np.exp(1j*w**2 * dz)
         
-        D = dft(n) / np.sqrt(n)
+        # D = dft(n) / np.sqrt(n)
+        # 
+        # W = ((D.T).conjugate().dot(np.diag(h))).dot(D)
+        # 
         
-        W = ((D.T).conjugate().dot(np.diag(h))).dot(D)
+        
         
         for i in range(self.params.nz):
             
-            x = np.dot(W,x)
+            # x = np.dot(W,x)
+            
+            # x = np.fft.ifft(np.diag(h).dot(np.fft.fft(x)))
+            
+            x = np.fft.ifft(h * np.fft.fft(x))
             
             x = self.activation(x,dz)
             
-            x = x + self.noise(n=n,sigma2=0)
+            # x = x + self.noise(n=n,sigma2=0)
             
         y = x
         

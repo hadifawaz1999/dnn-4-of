@@ -6,8 +6,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 from tensorflow import keras
 
-params = Params(N=2**10,nz=500,T=10,number_symbols=3)
-dg = DataGenerator(N=2**10,T=10,number_symbols=3)
+T = 30
+
+params = Params(N=2**10,nz=1000,T=T,number_symbols=3)
+dg = DataGenerator(N=2**10,T=T,number_symbols=3)
 
 
 
@@ -21,11 +23,15 @@ NNET_GEN = Generative_Model(params=params)
 
 x = dg.q0t
 
-x /= np.sqrt((np.sum(np.abs(x)**2)))
+# x = np.exp(-params.t**2/2)
+
+# x = 1 / np.cosh(params.t)
+
+# x = np.sinc()
+
+# x /= np.sqrt((np.sum(np.abs(x)**2)))
 
 y = NNET_GEN.nnet_generator(x=x)
-
-plt.figure(figsize=(20,10))
 
 plt.figure(figsize=(20,10))
 
@@ -37,10 +43,27 @@ plt.plot(params.t,np.abs(y),color='red',label=r'$|q(t,L)|$',lw=3)
 plt.legend()
 plt.savefig('plots/q0t_vs_qLt_generaive_model.png')
 
+plt.clf()
+
+q0f = np.fft.fftshift(np.fft.fft(x))
+
+yf = np.fft.fftshift(np.fft.fft(y))
+
+plt.figure(figsize=(20,10))
+
+plt.xlabel(r'frequency')
+plt.ylabel(r'| . |')
+plt.plot(params.f,np.abs(q0f),color='black',label=r'$|q(t,0)|$',lw=3)
+plt.plot(params.f,np.abs(yf),color='red',label=r'$|q(t,L)|$',lw=3)
+
+plt.legend()
+plt.savefig('plots/q0f_vs_qLf_generaive_model.png')
+
+
 # print(np.sum(np.abs(y)**2))
 
 # calculate BER
-
+exit()
 y = np.asarray([[y[i].real , y[i].imag] for i in range(len(y))])
 
 print(y.shape)
