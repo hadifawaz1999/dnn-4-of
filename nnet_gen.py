@@ -32,8 +32,6 @@ class Generative_Model:
         
         # return x * np.exp(1j*2*dz* (x.T).dot(x))
         
-        print(x * np.exp(1j*2*dz* np.sum(np.abs(x)**2)))
-        
         return x * np.exp(1j*2*dz* np.sum(np.abs(x)**2))
     
     def nnet_generator(self,x):
@@ -57,7 +55,7 @@ class Generative_Model:
             
             x = self.activation(x,dz)
             
-            x = x + self.noise(n=n,sigma2=self.params.sigma2)
+            x = x + self.noise(n=n,sigma2=0)
             
         y = x
         
