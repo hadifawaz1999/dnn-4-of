@@ -6,8 +6,8 @@ import scipy
 
 class DataGenerator:
 
-    def __init__(self, Length=1e3, Bandwith=6, power_loss_db=0.2*1e-3, dispersion=17*1e-3, Gamma=1.27*1e-3,
-                 nsp=1, h=6.626*1e-34, lambda0=1.55*1e-6, T=200, N=2**5, number_symbols=3, p=0.5,M=16,):
+    def __init__(self, Length=1e6, Bandwith=6, power_loss_db=0.2*1e-3, dispersion=17, Gamma=1.27*1e-3,
+                 nsp=1, h=6.626*1e-34, lambda0=1.55, T=200, N=2**5, number_symbols=3, p=0.5,M=16,):
 
         self.Length = Length
         self.Bandwith = Bandwith # GHz to Hz
@@ -21,9 +21,15 @@ class DataGenerator:
         self.f0 = self.c / self.lambda0
         self.alpha = 1e-4 * log2(10) * self.power_loss_db
         self.beta2 = - (self.lambda0**2 / (2 * pi * self.c)) * self.dispersion
+        print("beta2 : ",self.beta2)
         self.L0 = self.Length
         self.T0 = sqrt(abs(self.beta2)*self.L0 / 2)
         self.P0 = 2 / (self.Gamma * self.L0)
+        
+        self.Bandwith_n = self.Bandwith * self.T0
+        
+        print(self.Bandwith_n)
+        
         self.sigma02 = self.nsp * self.h * self.alpha * self.f0
         self.sigma2 = (self.sigma02 * self.L0) / (self.P0 * self.T0)
         self.M = M
@@ -67,6 +73,10 @@ class DataGenerator:
         else:
             
             self.generate_constellation(M=self.M)
+            
+        self.average_constellation_power = np.mean(self.Constellation[:,0]**2 + self.Constellation[:,1]**2)
+        
+        self.Constellation = np.divide(self.Constellation,self.average_constellation_power)
 
     def generate_constellation(self,M):
         
@@ -147,8 +157,8 @@ class DataGenerator:
         
         for i in range(self.l1,self.l2+1,1):
             
-            self.q0t_list.append(sqrt(self.Bandwith) * complex(self.s[i - self.l1,0],self.s[i - self.l1,1]) *\
-                                 np.sinc(self.Bandwith * self.t - i))
+            self.q0t_list.append(sqrt(self.Bandwith_n) * complex(self.s[i - self.l1,0],self.s[i - self.l1,1]) *\
+                                 np.sinc(self.Bandwith_n * self.t - i))
         
         self.q0t_list = np.asarray(self.q0t_list)
         

@@ -6,10 +6,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 from tensorflow import keras
 
-T = 30
+T = 200
+N = 2**10
 
-params = Params(N=2**10,nz=1000,T=T,number_symbols=3)
-dg = DataGenerator(N=2**10,T=T,number_symbols=3)
+params = Params(N=N,nz=500,T=T,number_symbols=3)
+dg = DataGenerator(N=N,T=T,number_symbols=3)
 
 
 
@@ -33,11 +34,13 @@ x = dg.q0t
 
 y = NNET_GEN.nnet_generator(x=x)
 
+print(np.sum(np.abs(y)**2))
+
 plt.figure(figsize=(20,10))
 
 plt.xlabel(r'time')
 plt.ylabel(r'| . |')
-plt.plot(params.t,np.abs(x),color='black',label=r'$|q(t,0)|$',lw=3)
+plt.plot(params.t,np.abs(x),color='black',label=r'$|q(t,0)|$',lw=7)
 plt.plot(params.t,np.abs(y),color='red',label=r'$|q(t,L)|$',lw=3)
 
 plt.legend()
@@ -53,7 +56,7 @@ plt.figure(figsize=(20,10))
 
 plt.xlabel(r'frequency')
 plt.ylabel(r'| . |')
-plt.plot(params.f,np.abs(q0f),color='black',label=r'$|q(t,0)|$',lw=3)
+plt.plot(params.f,np.abs(q0f),color='black',label=r'$|q(t,0)|$',lw=7)
 plt.plot(params.f,np.abs(yf),color='red',label=r'$|q(t,L)|$',lw=3)
 
 plt.legend()
