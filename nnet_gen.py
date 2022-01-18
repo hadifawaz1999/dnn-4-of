@@ -20,7 +20,9 @@ class Generative_Model:
         noise_real = np.random.normal(loc=0,scale=sqrt(self.Pn/2),size=n)
         noise_imag = np.random.normal(loc=0,scale=sqrt(self.Pn/2),size=n)
         
-        noise = np.asarray([complex(noise_real[i],noise_imag[i]) for i in range(n)])
+        # noise = np.asarray([complex(noise_real[i],noise_imag[i]) for i in range(n)])
+        
+        noise = noise_real + 1j * noise_imag
         
         return noise
     
