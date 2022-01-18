@@ -43,3 +43,5 @@ print(time.time() - start_time)
 print(feature_vectors.shape)
 print(labels.shape)
 
+np.save(arr=feature_vectors,file='data/feature_vectors.npy')
+np.save(arr=labels,file='data/labels.npy')
