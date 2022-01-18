@@ -3,6 +3,12 @@ from numpy.core.defchararray import count
 from data import DataGenerator
 import matplotlib.pyplot as plt
 
+a = np.load('data/feature_vectors.npy')
+print(a.shape)
+b = np.load('data/labels.npy')
+print(b.shape)
+exit()
+
 # Test Draw Constellation
 
 '''

@@ -65,8 +65,9 @@ class Generative_Model:
             
             x = self.activation(x,dz)
             
-            # x = x + self.noise(n=n,sigma2=0)
             
+            x = x + self.noise(n=n,sigma2=self.params.sigma2)
+    
         y = x
         
         return y
