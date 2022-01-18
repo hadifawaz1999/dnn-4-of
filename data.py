@@ -21,14 +21,12 @@ class DataGenerator:
         self.f0 = self.c / self.lambda0
         self.alpha = 1e-4 * log2(10) * self.power_loss_db
         self.beta2 = - (self.lambda0**2 / (2 * pi * self.c)) * self.dispersion
-        print("beta2 : ",self.beta2)
         self.L0 = self.Length
         self.T0 = sqrt(abs(self.beta2)*self.L0 / 2)
         self.P0 = 2 / (self.Gamma * self.L0)
         
         self.Bandwith_n = self.Bandwith * self.T0
         
-        print(self.Bandwith_n)
         
         self.sigma02 = self.nsp * self.h * self.alpha * self.f0
         self.sigma2 = (self.sigma02 * self.L0) / (self.P0 * self.T0)
@@ -164,7 +162,7 @@ class DataGenerator:
         
         self.q0t = np.sum(self.q0t_list,axis=0)
         
-        self.q0t_FFT = scipy.fft.fft(self.q0t)   
+        self.q0t_FFT = np.fft.fft(self.q0t)   
         
         
     def plot_q0t(self):
