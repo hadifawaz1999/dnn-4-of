@@ -1,5 +1,5 @@
-from channel import Channel
-from params import Params
+# from channel import Channel
+# from params import Params
 import numpy as np
 from math import *
 from scipy.linalg import dft
