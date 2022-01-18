@@ -6,9 +6,9 @@ import time
 feature_vectors = np.load(file='/app/data/feature_vectors.npy')
 labels = np.load(file='/app/data/labels.npy')
 
-xtrain , xtest , ytrain , ytest = train_test_split(feature_vectors,labels,test_size=0.20)
+xtrain , xtest , ytrain , ytest = train_test_split(feature_vectors,labels,test_size=0.20,random_state=42)
 
-xtrain , xvalidation , ytrain , yvalidation = train_test_split(xtrain,ytrain,test_size=0.125)
+xtrain , xvalidation , ytrain , yvalidation = train_test_split(xtrain,ytrain,test_size=0.125,random_state=42)
 
 ffn = FFN(xtrain=xtrain,ytrain=ytrain,xtest=xtest,ytest=ytest,
           xvalidation=xvalidation,yvalidation=yvalidation)

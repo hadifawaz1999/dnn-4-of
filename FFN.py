@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 class FFN:
 
     def __init__(self, xtrain, ytrain, xtest, ytest, xvalidation, yvalidation,
-                 batch_size=1000, epochs=1000, learning_rate=1,
+                 batch_size=1000, epochs=1000, learning_rate=10,
                  build_model=True, save_model=True, draw_model=True,
                  show_summary=False, show_verbose=True):
 
