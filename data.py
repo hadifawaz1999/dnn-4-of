@@ -142,6 +142,12 @@ class DataGenerator:
             self.s.append(self.gray_to_symb[b_i])
         
         self.s = np.asarray(self.s)
+        
+    def testbs(self):
+        
+        self.s = np.asarray([list(self.Constellation[0]),list(self.Constellation[1])])
+        print(self.s)
+        self.mod()
 
     def mod(self):
         

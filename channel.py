@@ -7,8 +7,8 @@ from data import DataGenerator
 
 class Channel:
 
-    def __init__(self, Length=1e3, Bandwith=6, power_loss_db=0.2*1e-3, dispersion=17*1e-3, Gamma=1.27*1e-3,
-                 nsp=1, h=6.626*1e-34, lambda0=1.55*1e-6, T=200, N=2**5, number_symbols=3, p=0.5,M=16):
+    def __init__(self, Length=1e3, Bandwith=6, power_loss_db=0.2*1e-3, dispersion=17, Gamma=1.27,
+                 nsp=1, h=6.626*1e-34, lambda0=1.55, T=200, N=2**5, number_symbols=3, p=0.5,M=16):
 
         self.Length = Length
         self.Bandwith = Bandwith
@@ -68,6 +68,10 @@ class Channel:
     def setter_noise(self,sigma2):
         
         self.sigma2 = sigma2
+        
+    def setter_function_nnet(self,qlt):
+        
+        self.qzte = qlt
 
     def channel_transfer_function(self, z=None):
         
@@ -138,8 +142,8 @@ class Channel:
 
         for i in range(self.l1, self.l2+1, 1):
 
-            temp = sqrt(self.Bandwith) * np.sum(np.multiply(self.qzte,
-                                         np.sinc(self.Bandwith*self.t - i))) * self.dt
+            temp = sqrt(self.Bandwith * self.T0) * np.sum(np.multiply(self.qzte,
+                                         np.sinc(self.Bandwith * self.T0 *self.t - i))) * self.dt
             
             self.s_hat.append(temp)
             
@@ -176,6 +180,15 @@ class Channel:
             
         self.b_hat = np.asarray(self.b_hat)
         
+    def test_bs(self):
+        
+        self.data_generator.testbs()
+        self.qzte = self.data_generator.q0t
+        self.number_symbols=2
+        self.dmod()
+        
+        
+        print(self.s_hat)
         
     def evaluate_results(self):
         

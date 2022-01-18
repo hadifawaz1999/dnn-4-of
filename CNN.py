@@ -37,22 +37,22 @@ class FFN:
         self.input_layer = tf.keras.layers.Input(
             self.xtrain.shape[1:], name='Input')
 
-        self.flatten1 = tf.keras.layers.Flatten(name='Flatten1')(self.input_layer)
+        self.conv1 = tf.keras.layers.Conv1D(
+            filters=10, kernel_size=2**5 ,activation='tanh', name='Conv1')(self.input_layer)
 
-        self.dense1 = tf.keras.layers.Dense(
-            units=2**9, activation='tanh', name='Dense1')(self.flatten1)
+        self.maxpool1 = tf.keras.layers.MaxPool1D(
+            pool_size=2, name='MaxPool1')(self.conv1)
 
-        self.dense2 = tf.keras.layers.Dense(
-            units=2**7, activation='tanh', name='Dense2')(self.dense1)
+        self.conv2 = tf.keras.layers.Conv1D(
+            filters=30,kernel_size=2**3, activation='tanh', name='Conv2')(self.maxpool1)
 
-        self.dense3 = tf.keras.layers.Dense(
-            units=2**7, activation='tanh', name='Dense3')(self.dense2)
-
-        self.dense4 = tf.keras.layers.Dense(
-            units=2**8, activation='tanh', name='Dense4')(self.dense3)
+        self.maxpool2 = tf.keras.layers.MaxPool1D(
+            pool_size=2, name='MaxPool2')(self.conv2)
+        
+        self.flatten1 = tf.keras.layers.Flatten(name='Flatten1')(self.maxpool2)
 
         self.output_layer = tf.keras.layers.Dense(
-            units=self.N*2, activation='linear', name='Output')(self.dense4)
+            units=self.N*2, activation='linear', name='Output')(self.maxpool2)
 
         self.my_model = tf.keras.models.Model(
             inputs=self.input_layer, outputs=self.output_layer)

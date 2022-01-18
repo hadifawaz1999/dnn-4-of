@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 class FFN:
 
     def __init__(self, xtrain, ytrain, xtest, ytest, xvalidation, yvalidation,
-                 batch_size=700, epochs=1000, learning_rate=10,
+                 batch_size=1000, epochs=400, learning_rate=15,
                  build_model=True, save_model=True, draw_model=True,
                  show_summary=False, show_verbose=True):
 
@@ -96,6 +96,8 @@ class FFN:
     def evaluation(self):
         
         self.ypred = self.my_model.predict(self.xtest)
+        
+        self.ypred_train = self.my_model.predict(self.xtrain)
         
         self.error = np.mean((self.ytest - self.ypred)**2)
         
