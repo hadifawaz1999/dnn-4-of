@@ -5,6 +5,7 @@ import time
 from channel import Channel
 from data import DataGenerator
 import matplotlib.pyplot as plt
+from CNN import CNN
 
 # feature_vectors = np.load(file='/app/data/feature_vectors_10knoise.npy')
 # bit_signals = np.load(file='/app/data/bit_signals_10knoise.npy')
@@ -13,20 +14,23 @@ import matplotlib.pyplot as plt
 # print(feature_vectors.shape)
 # print(labels.shape)
 
-xtrain = np.load('/app/data/feature_vectors_train_10knoise.npy')
-ytrain = np.load('/app/data/labels_train_10knoise.npy')
-btrain = np.load('/app/data/bit_signals_train_10knoise.npy')
+xtrain = np.load('data/feature_vectors_train_10knoise.npy')
+ytrain = np.load('data/labels_train_10knoise.npy')
+btrain = np.load('data/bit_signals_train_10knoise.npy')
+sbtrain=np.load('data/symbols_train_10knoise.npy')
 
-xtest = np.load('/app/data/feature_vectors_test_10knoise.npy')
-ytest = np.load('/app/data/labels_test_10knoise.npy')
-btest = np.load('/app/data/bit_signals_test_10knoise.npy')
+xtest = np.load('data/feature_vectors_test_10knoise.npy')
+ytest = np.load('data/labels_test_10knoise.npy')
+btest = np.load('data/bit_signals_test_10knoise.npy')
+sbtest=np.load('data/symbols_test_10knoise.npy')
 
-xvalidation = np.load('/app/data/feature_vectors_val_10knoise.npy')
-yvalidation = np.load('/app/data/labels_val_10knoise.npy')
-bvalidation = np.load('/app/data/bit_signals_val_10knoise.npy')
+xvalidation = np.load('data/feature_vectors_val_10knoise.npy')
+yvalidation = np.load('data/labels_val_10knoise.npy')
+bvalidation = np.load('data/bit_signals_val_10knoise.npy')
+sbval=np.load('data/symbols_val_10knoise.npy')
 
 
-ffn = FFN(xtrain=xtrain,ytrain=ytrain,xtest=xtest,ytest=ytest,
+ffn = CNN(xtrain=xtrain,ytrain=ytrain,xtest=xtest,ytest=ytest,
           xvalidation=xvalidation,yvalidation=yvalidation)
 
 start_time = time.time()
@@ -37,9 +41,9 @@ ffn.fit()
 
 print("score = ",ffn.evaluation())
 
-ypred = ffn.ypred_train
+ypred = ffn.ypred
 
-optic_fiber_channel = Channel(number_symbols=32,N=2**10,T=200)
+optic_fiber_channel = Channel(number_symbols=32,N=2**10,T=200,Length=30)
 
 print(ypred.shape)
 
@@ -50,16 +54,14 @@ print(ypred.shape)
 b_hat = []
 
 print(ypred.shape)
-for i in range(1):
+for i in range(len(ypred)):
     
     optic_fiber_channel.setter_function_nnet(ypred[i,:,0] + 1j * ypred[i,:,1])
     
     optic_fiber_channel.dmod()
     optic_fiber_channel.detector()
     optic_fiber_channel.symb_to_bit()
-    
-    print(optic_fiber_channel.s_hat)
-    print(optic_fiber_channel.Constellation)
+
     
     temp = optic_fiber_channel.b_hat
     
@@ -73,6 +75,6 @@ for i in range(1):
 
     b_hat.append(np.asarray(b_tilde))
     
-BER = np.mean(np.abs(b_hat - btrain))
+BER = np.mean(np.abs(b_hat - bvalidation))
 
 print(BER)

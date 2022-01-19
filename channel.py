@@ -7,8 +7,8 @@ from data import DataGenerator
 
 class Channel:
 
-    def __init__(self, Length=1e3, Bandwith=6, power_loss_db=0.2*1e-3, dispersion=17, Gamma=1.27,
-                 nsp=1, h=6.626*1e-34, lambda0=1.55, T=200, N=2**5, number_symbols=3, p=0.5,M=16):
+    def __init__(self, Length=30, Bandwith=6, power_loss_db=0.2, dispersion=17, Gamma=1.27,
+                 nsp=1, h=6.626*1e-34, lambda0=1550, T=200, N=2**5, number_symbols=3, p=0.5,M=16):
 
         self.Length = Length
         self.Bandwith = Bandwith
@@ -20,7 +20,7 @@ class Channel:
         self.h = h
         self.c = 3e8
         self.f0 = self.c / self.lambda0
-        self.alpha = 1e-4 * log2(10) * self.power_loss_db
+        self.alpha = 10e-4 * log2(10) * self.power_loss_db
         self.beta2 = - (self.lambda0**2 / (2 * pi * self.c)) * self.dispersion
         self.L0 = self.Length
         self.T0 = sqrt(abs(self.beta2)*self.L0 / 2)
@@ -41,6 +41,8 @@ class Channel:
             T=self.T, N=self.N, number_symbols=self.number_symbols, p=self.p, M=self.M
 
         )
+
+        self.data_generator.setter_noise(10)
         
         self.constellation = self.data_generator.Constellation
         self.Constellation = np.asarray([complex(self.constellation[i,0],
@@ -90,7 +92,7 @@ class Channel:
             z = self.Length
 
         self.z = z
-        self.a = self.sigma2 * self.Bandwith * self.z
+        self.a = self.sigma2 * self.Bandwith * self.T0 * self.z
     
 
         self.f = self.data_generator.f
@@ -142,8 +144,8 @@ class Channel:
 
         for i in range(self.l1, self.l2+1, 1):
 
-            temp = sqrt(self.Bandwith * self.T0) * np.sum(np.multiply(self.qzte,
-                                         np.sinc(self.Bandwith * self.T0 *self.t - i))) * self.dt
+            temp = sqrt(self.Bandwith 
+            * self.T0) * np.sum(self.qzte*np.sinc(self.Bandwith * self.T0 *self.t - i) * self.dt)
             
             self.s_hat.append(temp)
             

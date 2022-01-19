@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 class FFN:
 
     def __init__(self, xtrain, ytrain, xtest, ytest, xvalidation, yvalidation,
-                 batch_size=1000, epochs=400, learning_rate=15,
+                 batch_size=1000, epochs=400, learning_rate=10,
                  build_model=True, save_model=True, draw_model=True,
                  show_summary=False, show_verbose=True):
 
@@ -67,9 +67,9 @@ class FFN:
 
             self.my_model.summary()
         
-        if self.draw_model:
+        #if self.draw_model:
             
-            tf.keras.utils.plot_model(self.my_model,'/app/Predictors/FFN/FFN.png',show_shapes=True)
+            #tf.keras.utils.plot_model(self.my_model,'/app/Predictors/FFN/FFN.png',show_shapes=True)
 
     def fit(self):
 
@@ -89,16 +89,16 @@ class FFN:
         
         plt.legend()
         
-        plt.savefig('/app/Predictors/FFN/FFN_loss_val_train.png')
+        plt.savefig('Predictors/FFN/FFN_loss_val_train.png')
         
         plt.clf()
         
     def evaluation(self):
         
-        self.ypred = self.my_model.predict(self.xtest)
+        self.ypred = self.my_model.predict(self.xvalidation)
         
         self.ypred_train = self.my_model.predict(self.xtrain)
         
-        self.error = np.mean((self.ytest - self.ypred)**2)
+        self.error = np.mean((self.yvalidation - self.ypred)**2)
         
         return self.error
