@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 class FFN:
 
     def __init__(self, xtrain, ytrain, xtest, ytest, xvalidation, yvalidation,
-                 batch_size=1000, epochs=400, learning_rate=10,
+                 batch_size=1000, epochs=500, learning_rate=5,
                  build_model=True, save_model=True, draw_model=True,
                  show_summary=False, show_verbose=True):
 
@@ -40,16 +40,16 @@ class FFN:
         self.flatten1 = tf.keras.layers.Flatten(name='Flatten1')(self.input_layer)
 
         self.dense1 = tf.keras.layers.Dense(
-            units=2**9, activation='tanh', name='Dense1')(self.flatten1)
+            units=2**9, activation='relu', name='Dense1')(self.flatten1)
 
         self.dense2 = tf.keras.layers.Dense(
-            units=2**7, activation='tanh', name='Dense2')(self.dense1)
+            units=2**7, activation='relu', name='Dense2')(self.dense1)
 
         self.dense3 = tf.keras.layers.Dense(
-            units=2**7, activation='tanh', name='Dense3')(self.dense2)
+            units=2**7, activation='relu', name='Dense3')(self.dense2)
 
         self.dense4 = tf.keras.layers.Dense(
-            units=2**8, activation='tanh', name='Dense4')(self.dense3)
+            units=2**8, activation='relu', name='Dense4')(self.dense3)
 
         self.output_layer = tf.keras.layers.Dense(
             units=self.N*2, activation='linear', name='Output')(self.dense4)
