@@ -75,6 +75,10 @@ class Channel:
         
         self.qzte = qlt
 
+    def setter_function_s_hat(self,SHAT):
+
+        self.s_hat = SHAT
+
     def channel_transfer_function(self, z=None):
         
         if z == None:

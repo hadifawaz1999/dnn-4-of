@@ -1,37 +1,10 @@
-import numpy as np
-from numpy.fft import fft,ifft,fftshift
-import matplotlib.pyplot as plt
-
-T = 500
-N=2**11
-dt=T/N
-z=1
-t = np.arange(start=-T/2,stop=T/2,step=dt)
-
-F=1/dt
-df=1/T
-f = np.arange(start=-F/2,stop=F/2,step=df)
-w = 2*np.pi*f 
-x = np.exp(-t**2/5)
-
-
-h = np.exp(1j*w**2*z)
-y = ifft(h*fftshift(fft(x)))
-
-print(np.linalg.norm(x,ord=2),np.linalg.norm(y,ord=2))
-
-plt.plot(t,np.abs(x))
-plt.plot(t,np.abs(y))
-plt.show()
+import tensorflow as tf
 
 
 
-plt.clf()
+input_layer=tf.keras.layers.Input((1024,2))
+output_layer = tf.keras.layers.Conv1D(filters=4,padding='same',kernel_size=32)(input_layer)
+model=tf.keras.models.Model(inputs = input_layer,outputs=output_layer)
 
-xf = fftshift(fft(x))
-yf = fftshift(fft(y))
+model.summary()
 
-
-plt.plot(f,np.abs(xf))
-plt.plot(f,np.abs(yf))
-plt.show()
