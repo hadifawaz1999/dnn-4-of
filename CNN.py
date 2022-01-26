@@ -53,10 +53,10 @@ class CNN:
 
 
         self.conv3 = tf.keras.layers.Conv1D(
-           filters=2,kernel_size=32,padding='same', activation='relu', name='Conv3')(self.results1)
+           filters=2,kernel_size=32,padding='same', activation='tanh', name='Conv3')(self.results1)
 
         self.conv4 = tf.keras.layers.Conv1D(
-           filters=2,kernel_size=32,padding='same', activation='relu', name='Conv4')(self.conv3)
+           filters=2,kernel_size=32,padding='same', activation='tanh', name='Conv4')(self.conv3)
 
 
 

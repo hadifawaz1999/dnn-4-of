@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 class CNN_symbols:
 
     def __init__(self, xtrain, ytrain, xtest, ytest, xvalidation, yvalidation,
-                 batch_size=200, epochs=500, learning_rate=2,
+                 batch_size=250, epochs=500, learning_rate=1,
                  build_model=True, save_model=True, draw_model=True,
                  show_summary=True, show_verbose=True):
 
@@ -30,6 +30,7 @@ class CNN_symbols:
 
             self.build_my_model()
 
+
     def build_my_model(self):
 
         self.N = int(self.xtrain.shape[1])
@@ -45,23 +46,29 @@ class CNN_symbols:
         self.conv2 = tf.keras.layers.Conv1D(
            filters=2,kernel_size=32, activation='relu',padding="same", name='Conv2')(self.conv1)
 
-        self.residual = tf.keras.layers.Conv1D(filters=2,kernel_size=1)(self.residual)
+           
+
+        #self.residual = tf.keras.layers.Conv1D(filters=2,kernel_size=1,activation='linear')(self.residual)
         
-        self.results = tf.keras.layers.add([self.conv2,self.residual])
+        
 
-        #self.maxpool = tf.keras.layers.MaxPool1D(pool_size=10)(self.results)
+        #self.results = tf.keras.layers.add([self.BN,self.residual])
+        
+        self.flatten1 = tf.keras.layers.Flatten(name='Flatten1')(self.conv2)
+        self.flatten2 = tf.keras.layers.Flatten(name='Flatten2')(self.residual)
+        
+        
 
-        self.flatten1 = tf.keras.layers.Flatten(name='Flatten1')(self.results)
+        self.results = tf.keras.layers.add([self.flatten1,self.flatten2])
 
-        self.BN = tf.keras.layers.BatchNormalization()(self.flatten1)
-
+        
         self.output_layer = tf.keras.layers.Dense(
-           units=64, activation='linear', name='Output')(self.BN)
+           units=64, activation='linear', name='Output')(self.results)
 
         self.my_model = tf.keras.models.Model(
             inputs=self.input_layer, outputs=self.output_layer)
 
-        self.my_loss = tf.keras.losses.MeanSquaredError()
+        self.my_loss = tf.keras.losses.MeanAbsoluteError()
 
         self.my_optimizer = tf.keras.optimizers.SGD(lr=self.learning_rate)
 

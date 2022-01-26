@@ -50,8 +50,6 @@ ypred = cnn.ypred
 
 optic_fiber_channel = Channel(number_symbols=32,N=2**10,T=200,Length=30)
 
-print(ypred.shape)
-
 ypred.shape = (-1,32,2)
 
 print(ypred.shape)
