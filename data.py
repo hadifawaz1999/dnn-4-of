@@ -51,6 +51,8 @@ class DataGenerator:
         self.fft_frequencies = np.fft.fftfreq(n=self.N,d=self.dt)
         
         self.number_bits = self.number_symbols * int(log2(self.M)) # nb in guide
+        
+        self.P_q0t = 2
 
         # Constellation
 
@@ -165,7 +167,7 @@ class DataGenerator:
         
         for i in range(self.l1,self.l2+1,1):
             
-            self.q0t_list.append(sqrt(self.Bandwith_n) * complex(self.s[i - self.l1,0],self.s[i - self.l1,1]) *\
+            self.q0t_list.append(sqrt(self.P_q0t * self.Bandwith_n) * complex(self.s[i - self.l1,0],self.s[i - self.l1,1]) *\
                                  np.sinc(self.Bandwith_n * self.t - i))
         
         self.q0t_list = np.asarray(self.q0t_list)

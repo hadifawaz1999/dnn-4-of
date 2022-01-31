@@ -7,11 +7,11 @@ import time
 
 start_time = time.time()
 
-dg = DataGenerator(T=200,N=2**10,number_symbols=32,Length=30)
+dg = DataGenerator(T=200,N=2**10,number_symbols=32,Length=1e3,Bandwith=10)
 
 dg.setter_noise(sigma2=10**-4)
 
-params = Params(N=2**10,T=200,number_symbols=32,nz=500,Length=30)
+params = Params(N=2**10,T=200,number_symbols=32,nz=500,Length=1e3,Bandwith=10)
 nnet_gen = Generative_Model(params=params)
 
 n_samples = 10**4
