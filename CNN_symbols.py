@@ -1,12 +1,14 @@
 import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
+from custom_loss_function import constellation_loss_function
 
+gpu_path = '/app/'
 
 class CNN_symbols:
 
     def __init__(self, xtrain, ytrain, xtest, ytest, xvalidation, yvalidation,
-                 batch_size=250, epochs=500, learning_rate=1,
+                 batch_size=300, epochs=200, learning_rate=2,
                  build_model=True, save_model=True, draw_model=True,
                  show_summary=True, show_verbose=True):
 
@@ -46,7 +48,7 @@ class CNN_symbols:
         self.conv2 = tf.keras.layers.Conv1D(
            filters=2,kernel_size=32, activation='relu',padding="same", name='Conv2')(self.conv1)
 
-           
+        
 
         #self.residual = tf.keras.layers.Conv1D(filters=2,kernel_size=1,activation='linear')(self.residual)
         
@@ -55,6 +57,7 @@ class CNN_symbols:
         #self.results = tf.keras.layers.add([self.BN,self.residual])
         
         self.flatten1 = tf.keras.layers.Flatten(name='Flatten1')(self.conv2)
+        
         self.flatten2 = tf.keras.layers.Flatten(name='Flatten2')(self.residual)
         
         
@@ -68,7 +71,9 @@ class CNN_symbols:
         self.my_model = tf.keras.models.Model(
             inputs=self.input_layer, outputs=self.output_layer)
 
-        self.my_loss = tf.keras.losses.MeanAbsoluteError()
+        # self.my_loss = tf.keras.losses.MeanAbsoluteError()
+        
+        self.my_loss = constellation_loss_function(alpha=1.2)
 
         self.my_optimizer = tf.keras.optimizers.SGD(lr=self.learning_rate)
 
@@ -81,7 +86,7 @@ class CNN_symbols:
         
         if self.draw_model:
             
-            tf.keras.utils.plot_model(self.my_model,'Predictors/CNN_symbols/CNN_symbols.png',show_shapes=True)
+            tf.keras.utils.plot_model(self.my_model,gpu_path+'Predictors/CNN_symbols/CNN_symbols.png',show_shapes=True)
 
     def fit(self):
 
@@ -101,7 +106,7 @@ class CNN_symbols:
         
         plt.legend()
         
-        plt.savefig('Predictors/CNN_symbols/CNN_symbols_loss_val_train.png')
+        plt.savefig(gpu_path+'Predictors/CNN_symbols/CNN_symbols_loss_val_train.png')
         
         plt.clf()
         
@@ -109,6 +114,12 @@ class CNN_symbols:
         
         self.ypred = self.my_model.predict(self.xvalidation)
         
+        self.ypred_train = self.my_model.predict(self.xtrain)
+        
         self.error = np.mean((self.yvalidation - self.ypred)**2)
         
+        self.error_train = np.mean((self.ytrain - self.ypred_train)**2)
+        
         return self.error
+        
+        # return self.error_train

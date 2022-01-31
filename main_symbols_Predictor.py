@@ -15,20 +15,22 @@ from CNN_symbols import CNN_symbols
 # print(feature_vectors.shape)
 # print(labels.shape)
 
-xtrain = np.load('data/feature_vectors_train_10knoise.npy')
-ytrain = np.load('data/labels_train_10knoise.npy')
-btrain = np.load('data/bit_signals_train_10knoise.npy')
-sbtrain=np.load('data/symbols_train_10knoise.npy')
+gpu_path = '/app/'
 
-xtest = np.load('data/feature_vectors_test_10knoise.npy')
-ytest = np.load('data/labels_test_10knoise.npy')
-btest = np.load('data/bit_signals_test_10knoise.npy')
-sbtest=np.load('data/symbols_test_10knoise.npy')
+xtrain = np.load(gpu_path+'data/feature_vectors_train_10knoise.npy')
+ytrain = np.load(gpu_path+'data/labels_train_10knoise.npy')
+btrain = np.load(gpu_path+'data/bit_signals_train_10knoise.npy')
+sbtrain=np.load(gpu_path+'data/symbols_train_10knoise.npy')
 
-xvalidation = np.load('data/feature_vectors_val_10knoise.npy')
-yvalidation = np.load('data/labels_val_10knoise.npy')
-bvalidation = np.load('data/bit_signals_val_10knoise.npy')
-sbval=np.load('data/symbols_val_10knoise.npy')
+xtest = np.load(gpu_path+'data/feature_vectors_test_10knoise.npy')
+ytest = np.load(gpu_path+'data/labels_test_10knoise.npy')
+btest = np.load(gpu_path+'data/bit_signals_test_10knoise.npy')
+sbtest=np.load(gpu_path+'data/symbols_test_10knoise.npy')
+
+xvalidation = np.load(gpu_path+'data/feature_vectors_val_10knoise.npy')
+yvalidation = np.load(gpu_path+'data/labels_val_10knoise.npy')
+bvalidation = np.load(gpu_path+'data/bit_signals_val_10knoise.npy')
+sbval=np.load(gpu_path+'data/symbols_val_10knoise.npy')
 
 sbtrain.shape = (-1,64)
 sbtest.shape = (-1,64)
@@ -45,6 +47,8 @@ cnn.fit()
 # print(time.time() - start_time)
 
 print("score = ",cnn.evaluation())
+
+# ypred = cnn.ypred_train
 
 ypred = cnn.ypred
 
@@ -77,5 +81,7 @@ for i in range(len(ypred)):
     b_hat.append(np.asarray(b_tilde))
     
 BER = np.mean(np.abs(b_hat - bvalidation))
+
+# BER = np.mean(np.abs(b_hat - btrain))
 
 print(BER)
