@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from custom_loss_function import constellation_loss_function
 
-gpu_path = '/app/'
+gpu_path = ''
 
 class CNN_symbols:
 
@@ -64,9 +64,11 @@ class CNN_symbols:
 
         self.results = tf.keras.layers.add([self.flatten1,self.flatten2])
 
+        self.tempo = tf.keras.layers.Dense(units=128, activation='relu', name='Outputtemp')(self.results)
+
         
         self.output_layer = tf.keras.layers.Dense(
-           units=64, activation='linear', name='Output')(self.results)
+           units=64, activation='linear', name='Output')(self.tempo)
 
         self.my_model = tf.keras.models.Model(
             inputs=self.input_layer, outputs=self.output_layer)

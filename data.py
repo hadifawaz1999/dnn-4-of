@@ -52,7 +52,7 @@ class DataGenerator:
         
         self.number_bits = self.number_symbols * int(log2(self.M)) # nb in guide
         
-        self.P_q0t = 2
+        self.P_q0t = 1
 
         # Constellation
 

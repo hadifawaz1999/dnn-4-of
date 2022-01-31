@@ -72,18 +72,18 @@ sb_train = symbols[0:7000]
 sb_test = symbols[7000:9000]
 sb_val = symbols[9000:]
 
-np.save(arr=fv_train,file="data/feature_vectors_train_10knoise.npy")
-np.save(arr=fv_test,file="data/feature_vectors_test_10knoise.npy")
-np.save(arr=fv_val,file="data/feature_vectors_val_10knoise.npy")
+np.save(arr=fv_train,file="data/feature_vectors_train_10knoise_L1000.npy")
+np.save(arr=fv_test,file="data/feature_vectors_test_10knoise_L1000.npy")
+np.save(arr=fv_val,file="data/feature_vectors_val_10knoise_L1000.npy")
 
-np.save(arr=bs_train,file="data/bit_signals_train_10knoise.npy")
-np.save(arr=bs_test,file="data/bit_signals_test_10knoise.npy")
-np.save(arr=bs_val,file="data/bit_signals_val_10knoise.npy")
+np.save(arr=bs_train,file="data/bit_signals_train_10knoise_L1000.npy")
+np.save(arr=bs_test,file="data/bit_signals_test_10knoise_L1000.npy")
+np.save(arr=bs_val,file="data/bit_signals_val_10knoise_L1000.npy")
 
-np.save(arr=lb_train,file="data/labels_train_10knoise.npy")
-np.save(arr=lb_test,file="data/labels_test_10knoise.npy")
-np.save(arr=lb_val,file="data/labels_val_10knoise.npy")
+np.save(arr=lb_train,file="data/labels_train_10knoise_L1000.npy")
+np.save(arr=lb_test,file="data/labels_test_10knoise_L1000.npy")
+np.save(arr=lb_val,file="data/labels_val_10knoise_L1000.npy")
 
-np.save(arr=sb_train,file="data/symbols_train_10knoise.npy")
-np.save(arr=sb_test,file="data/symbols_test_10knoise.npy")
-np.save(arr=sb_val,file="data/symbols_val_10knoise.npy")
+np.save(arr=sb_train,file="data/symbols_train_10knoise_L1000.npy")
+np.save(arr=sb_test,file="data/symbols_test_10knoise_L1000.npy")
+np.save(arr=sb_val,file="data/symbols_val_10knoise_L1000.npy")

@@ -14,23 +14,25 @@ from CNN import CNN
 # print(feature_vectors.shape)
 # print(labels.shape)
 
-xtrain = np.load('data/feature_vectors_train_10knoise.npy')
-ytrain = np.load('data/labels_train_10knoise.npy')
-btrain = np.load('data/bit_signals_train_10knoise.npy')
-sbtrain=np.load('data/symbols_train_10knoise.npy')
+gpu_path=''
 
-xtest = np.load('data/feature_vectors_test_10knoise.npy')
-ytest = np.load('data/labels_test_10knoise.npy')
-btest = np.load('data/bit_signals_test_10knoise.npy')
-sbtest=np.load('data/symbols_test_10knoise.npy')
+xtrain = np.load(gpu_path+'data/feature_vectors_train_10knoise_L1000.npy')
+ytrain = np.load(gpu_path+'data/labels_train_10knoise_L1000.npy')
+btrain = np.load(gpu_path+'data/bit_signals_train_10knoise_L1000.npy')
+sbtrain=np.load(gpu_path+'data/symbols_train_10knoise_L1000.npy')
 
-xvalidation = np.load('data/feature_vectors_val_10knoise.npy')
-yvalidation = np.load('data/labels_val_10knoise.npy')
-bvalidation = np.load('data/bit_signals_val_10knoise.npy')
-sbval=np.load('data/symbols_val_10knoise.npy')
+xtest = np.load(gpu_path+'data/feature_vectors_test_10knoise_L1000.npy')
+ytest = np.load(gpu_path+'data/labels_test_10knoise_L1000.npy')
+btest = np.load(gpu_path+'data/bit_signals_test_10knoise_L1000.npy')
+sbtest=np.load(gpu_path+'data/symbols_test_10knoise_L1000.npy')
+
+xvalidation = np.load(gpu_path+'data/feature_vectors_val_10knoise_L1000.npy')
+yvalidation = np.load(gpu_path+'data/labels_val_10knoise_L1000.npy')
+bvalidation = np.load(gpu_path+'data/bit_signals_val_10knoise_L1000.npy')
+sbval=np.load(gpu_path+'data/symbols_val_10knoise_L1000.npy')
 
 
-ffn = CNN(xtrain=xtrain,ytrain=ytrain,xtest=xtest,ytest=ytest,
+ffn = FFN(xtrain=xtrain,ytrain=ytrain,xtest=xtest,ytest=ytest,
           xvalidation=xvalidation,yvalidation=yvalidation)
 
 start_time = time.time()
@@ -43,7 +45,7 @@ print("score = ",ffn.evaluation())
 
 ypred = ffn.ypred
 
-optic_fiber_channel = Channel(number_symbols=32,N=2**10,T=200,Length=30)
+optic_fiber_channel = Channel(number_symbols=32,N=2**10,T=200,Length=1000,Bandwith=10)
 
 print(ypred.shape)
 

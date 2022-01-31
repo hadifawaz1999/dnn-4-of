@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 class FFN:
 
     def __init__(self, xtrain, ytrain, xtest, ytest, xvalidation, yvalidation,
-                 batch_size=1000, epochs=500, learning_rate=5,
+                 batch_size=400, epochs=200, learning_rate=2,
                  build_model=True, save_model=True, draw_model=True,
                  show_summary=False, show_verbose=True):
 
@@ -57,7 +57,7 @@ class FFN:
         self.my_model = tf.keras.models.Model(
             inputs=self.input_layer, outputs=self.output_layer)
 
-        self.my_loss = tf.keras.losses.MeanSquaredError()
+        self.my_loss = tf.keras.losses.MeanAbsoluteError()
 
         self.my_optimizer = tf.keras.optimizers.SGD(lr=self.learning_rate)
 
