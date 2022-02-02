@@ -24,7 +24,9 @@ def constellation_loss_function(alpha):
         
         relu_3 = tf.keras.activations.relu(distance_to_centers,threshold=0.1)
         
-        distance_to_centers = relu_1 - relu_2 + alpha * relu_3
+        #distance_to_centers = relu_1 - relu_2 + alpha * relu_3
+
+        distance_to_centers =  alpha * relu_3
 
         # loss = tf.math.reduce_mean(tf.square(distance_to_centers))
         

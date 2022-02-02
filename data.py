@@ -6,8 +6,8 @@ import scipy
 
 class DataGenerator:
 
-    def __init__(self, Length=30, Bandwith=6, power_loss_db=0.2, dispersion=17, Gamma=1.27,
-                 nsp=1, h=6.626*1e-34, lambda0=1550, T=200, N=2**5, number_symbols=3, p=0.5,M=16):
+    def __init__(self, Length=1000*1e3, Bandwith=10*1e6, power_loss_db=0.2, dispersion=17, Gamma=1.27*1e3,
+                 nsp=1, h=6.626*1e-34, lambda0=1.55*1e-6, T=200, N=2**5, number_symbols=3, p=0.5,M=16):
 
         self.Length = Length
         self.Bandwith = Bandwith # GHz to Hz
@@ -19,7 +19,7 @@ class DataGenerator:
         self.lambda0 = lambda0
         self.c = 3e8
         self.f0 = self.c / self.lambda0
-        self.alpha = 1e-4 * log2(10) * self.power_loss_db
+        self.alpha = 0.46*1e-4
         self.beta2 = - (self.lambda0**2 / (2 * pi * self.c)) * self.dispersion
         self.L0 = self.Length
         self.T0 = sqrt(abs(self.beta2)*self.L0 / 2)
@@ -81,6 +81,10 @@ class DataGenerator:
     def setter_noise(self,sigma2):
 
         self.sigma2 = sigma2
+
+    def setter_noise0(self,sigma02):
+
+        self.sigma02 = sigma02
 
     def generate_constellation(self,M):
         

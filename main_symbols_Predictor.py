@@ -17,20 +17,20 @@ from CNN_symbols import CNN_symbols
 
 gpu_path = ''
 
-xtrain = np.load(gpu_path+'data/feature_vectors_train_10knoise_L1000.npy')
-ytrain = np.load(gpu_path+'data/labels_train_10knoise_L1000.npy')
-btrain = np.load(gpu_path+'data/bit_signals_train_10knoise_L1000.npy')
-sbtrain=np.load(gpu_path+'data/symbols_train_10knoise_L1000.npy')
+xtrain = np.load(gpu_path+'data/feature_vectors_train_10knoise_L1000_P9.npy')
+ytrain = np.load(gpu_path+'data/labels_train_10knoise_L1000_P9.npy')
+btrain = np.load(gpu_path+'data/bit_signals_train_10knoise_L1000_P9.npy')
+sbtrain=np.load(gpu_path+'data/symbols_train_10knoise_L1000_P9.npy')
 
-xtest = np.load(gpu_path+'data/feature_vectors_test_10knoise_L1000.npy')
-ytest = np.load(gpu_path+'data/labels_test_10knoise_L1000.npy')
-btest = np.load(gpu_path+'data/bit_signals_test_10knoise_L1000.npy')
-sbtest=np.load(gpu_path+'data/symbols_test_10knoise_L1000.npy')
+xtest = np.load(gpu_path+'data/feature_vectors_test_10knoise_L1000_P9.npy')
+ytest = np.load(gpu_path+'data/labels_test_10knoise_L1000_P9.npy')
+btest = np.load(gpu_path+'data/bit_signals_test_10knoise_L1000_P9.npy')
+sbtest=np.load(gpu_path+'data/symbols_test_10knoise_L1000_P9.npy')
 
-xvalidation = np.load(gpu_path+'data/feature_vectors_val_10knoise_L1000.npy')
-yvalidation = np.load(gpu_path+'data/labels_val_10knoise_L1000.npy')
-bvalidation = np.load(gpu_path+'data/bit_signals_val_10knoise_L1000.npy')
-sbval=np.load(gpu_path+'data/symbols_val_10knoise_L1000.npy')
+xvalidation = np.load(gpu_path+'data/feature_vectors_val_10knoise_L1000_P9.npy')
+yvalidation = np.load(gpu_path+'data/labels_val_10knoise_L1000_P9.npy')
+bvalidation = np.load(gpu_path+'data/bit_signals_val_10knoise_L1000_P9.npy')
+sbval=np.load(gpu_path+'data/symbols_val_10knoise_L1000_P9.npy')
 
 sbtrain.shape = (-1,64)
 sbtest.shape = (-1,64)

@@ -8,7 +8,7 @@ gpu_path = ''
 class CNN_symbols:
 
     def __init__(self, xtrain, ytrain, xtest, ytest, xvalidation, yvalidation,
-                 batch_size=300, epochs=200, learning_rate=2,
+                 batch_size=200, epochs=300, learning_rate=0.05,
                  build_model=True, save_model=True, draw_model=True,
                  show_summary=True, show_verbose=True):
 
@@ -63,19 +63,16 @@ class CNN_symbols:
         
 
         self.results = tf.keras.layers.add([self.flatten1,self.flatten2])
-
-        self.tempo = tf.keras.layers.Dense(units=128, activation='relu', name='Outputtemp')(self.results)
-
         
         self.output_layer = tf.keras.layers.Dense(
-           units=64, activation='linear', name='Output')(self.tempo)
+           units=64, activation='linear', name='Output')(self.results)
 
         self.my_model = tf.keras.models.Model(
             inputs=self.input_layer, outputs=self.output_layer)
 
         # self.my_loss = tf.keras.losses.MeanAbsoluteError()
         
-        self.my_loss = constellation_loss_function(alpha=1.2)
+        self.my_loss = constellation_loss_function(alpha=1.1)
 
         self.my_optimizer = tf.keras.optimizers.SGD(lr=self.learning_rate)
 
