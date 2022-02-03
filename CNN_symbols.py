@@ -1,3 +1,4 @@
+from unittest import result
 import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
@@ -8,7 +9,7 @@ gpu_path = ''
 class CNN_symbols:
 
     def __init__(self, xtrain, ytrain, xtest, ytest, xvalidation, yvalidation,
-                 batch_size=200, epochs=300, learning_rate=0.05,
+                 batch_size=200, epochs=200, learning_rate=0.1,
                  build_model=True, save_model=True, draw_model=True,
                  show_summary=True, show_verbose=True):
 
@@ -42,27 +43,41 @@ class CNN_symbols:
 
         self.residual = self.input_layer
 
+        #self.residual = tf.keras.layers.BatchNormalization()(self.residual)
+
         self.conv1 = tf.keras.layers.Conv1D(
-            filters=2, kernel_size=32 ,activation='relu',padding="same", name='Conv1')(self.input_layer)
+            filters=2, kernel_size=32 ,activation='relu',padding='same', name='Conv1')(self.input_layer)
 
         self.conv2 = tf.keras.layers.Conv1D(
-           filters=2,kernel_size=32, activation='relu',padding="same", name='Conv2')(self.conv1)
+           filters=2,kernel_size=32, activation='relu',padding='same', name='Conv2')(self.conv1)
+
+
+
+        #self.conv3 = tf.keras.layers.Conv1D(
+           #filters=2,kernel_size=32, activation='relu', name='Conv3')(self.conv2)
+
+        #self.conv4 = tf.keras.layers.Conv1D(
+           #filters=2,kernel_size=32, activation='relu', name='Conv4')(self.conv3)
 
         
 
-        #self.residual = tf.keras.layers.Conv1D(filters=2,kernel_size=1,activation='linear')(self.residual)
-        
         
 
-        #self.results = tf.keras.layers.add([self.BN,self.residual])
+        self.residual = tf.keras.layers.Conv1D(filters=2,kernel_size=1,activation='linear')(self.residual)
+        
         
         self.flatten1 = tf.keras.layers.Flatten(name='Flatten1')(self.conv2)
         
         self.flatten2 = tf.keras.layers.Flatten(name='Flatten2')(self.residual)
         
-        
-
         self.results = tf.keras.layers.add([self.flatten1,self.flatten2])
+
+        
+        #self.dense = tf.keras.layers.Dense(units=2**10,activation='relu',name='dense')(self.results)
+
+        #self.results = self.flatten1
+
+        #self.results = tf.keras.layers.BatchNormalization()(self.results)
         
         self.output_layer = tf.keras.layers.Dense(
            units=64, activation='linear', name='Output')(self.results)
@@ -70,7 +85,7 @@ class CNN_symbols:
         self.my_model = tf.keras.models.Model(
             inputs=self.input_layer, outputs=self.output_layer)
 
-        # self.my_loss = tf.keras.losses.MeanAbsoluteError()
+        #self.my_loss = tf.keras.losses.MeanAbsoluteError()
         
         self.my_loss = constellation_loss_function(alpha=1.1)
 

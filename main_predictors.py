@@ -16,23 +16,24 @@ from CNN import CNN
 
 gpu_path=''
 
-xtrain = np.load(gpu_path+'data/feature_vectors_train_10knoise_L1000.npy')
-ytrain = np.load(gpu_path+'data/labels_train_10knoise_L1000.npy')
-btrain = np.load(gpu_path+'data/bit_signals_train_10knoise_L1000.npy')
-sbtrain=np.load(gpu_path+'data/symbols_train_10knoise_L1000.npy')
 
-xtest = np.load(gpu_path+'data/feature_vectors_test_10knoise_L1000.npy')
-ytest = np.load(gpu_path+'data/labels_test_10knoise_L1000.npy')
-btest = np.load(gpu_path+'data/bit_signals_test_10knoise_L1000.npy')
-sbtest=np.load(gpu_path+'data/symbols_test_10knoise_L1000.npy')
+xtrain = np.load(gpu_path+'data/feature_vectors_train_10knoise_SNR35.npy')
+ytrain = np.load(gpu_path+'data/labels_train_10knoise_SNR35.npy')
+btrain = np.load(gpu_path+'data/bit_signals_train_10knoise_SNR35.npy')
+sbtrain=np.load(gpu_path+'data/symbols_train_10knoise_SNR35.npy')
 
-xvalidation = np.load(gpu_path+'data/feature_vectors_val_10knoise_L1000.npy')
-yvalidation = np.load(gpu_path+'data/labels_val_10knoise_L1000.npy')
-bvalidation = np.load(gpu_path+'data/bit_signals_val_10knoise_L1000.npy')
-sbval=np.load(gpu_path+'data/symbols_val_10knoise_L1000.npy')
+xtest = np.load(gpu_path+'data/feature_vectors_test_10knoise_SNR35.npy')
+ytest = np.load(gpu_path+'data/labels_test_10knoise_SNR35.npy')
+btest = np.load(gpu_path+'data/bit_signals_test_10knoise_SNR35.npy')
+sbtest=np.load(gpu_path+'data/symbols_test_10knoise_SNR35.npy')
+
+xvalidation = np.load(gpu_path+'data/feature_vectors_val_10knoise_SNR35.npy')
+yvalidation = np.load(gpu_path+'data/labels_val_10knoise_SNR35.npy')
+bvalidation = np.load(gpu_path+'data/bit_signals_val_10knoise_SNR35.npy')
+sbval=np.load(gpu_path+'data/symbols_val_10knoise_SNR35.npy')
 
 
-ffn = FFN(xtrain=xtrain,ytrain=ytrain,xtest=xtest,ytest=ytest,
+ffn = CNN(xtrain=xtrain,ytrain=ytrain,xtest=xtest,ytest=ytest,
           xvalidation=xvalidation,yvalidation=yvalidation)
 
 start_time = time.time()
@@ -45,11 +46,11 @@ print("score = ",ffn.evaluation())
 
 ypred = ffn.ypred
 
-optic_fiber_channel = Channel(number_symbols=32,N=2**10,T=200,Length=1000,Bandwith=10)
+optic_fiber_channel = Channel(number_symbols=32,N=2**11,T=40,Length=1000e3,Bandwith=10e9)
 
 print(ypred.shape)
 
-ypred.shape = (-1,2**10,2)
+ypred.shape = (-1,2**11,2)
 
 print(ypred.shape)
 

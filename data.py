@@ -6,8 +6,8 @@ import scipy
 
 class DataGenerator:
 
-    def __init__(self, Length=1000*1e3, Bandwith=10*1e6, power_loss_db=0.2, dispersion=17, Gamma=1.27*1e3,
-                 nsp=1, h=6.626*1e-34, lambda0=1.55*1e-6, T=200, N=2**5, number_symbols=3, p=0.5,M=16):
+    def __init__(self, Length=1000*1e3, Bandwith=10*1e9, power_loss_db=0.2, dispersion=17e-6, Gamma=1.27*1e-6,
+                 nsp=1, h=6.626*1e-34, lambda0=1.55*1e-6, T=65, N=2**11, number_symbols=3, p=0.5,M=16):
 
         self.Length = Length
         self.Bandwith = Bandwith # GHz to Hz
@@ -86,6 +86,9 @@ class DataGenerator:
 
         self.sigma02 = sigma02
 
+        self.sigma2 = (self.sigma02 * self.L0) / (self.P0 * self.T0)
+
+
     def generate_constellation(self,M):
         
         a = 1
@@ -110,6 +113,7 @@ class DataGenerator:
         self.bernoulli = np.random.binomial(n=1, p=self.p, size=self.number_bits)
 
         # return self.bernoulli
+  
 
     def bit_to_symb(self):
 
@@ -152,6 +156,7 @@ class DataGenerator:
             self.s.append(self.gray_to_symb[b_i])
         
         self.s = np.asarray(self.s)
+
         
     def testbs(self):
         
@@ -179,6 +184,7 @@ class DataGenerator:
         self.q0t = np.sum(self.q0t_list,axis=0)
         
         self.q0t_FFT = np.fft.fft(self.q0t)   
+
         
         
     def plot_q0t(self):

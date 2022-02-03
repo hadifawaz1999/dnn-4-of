@@ -1,10 +1,19 @@
-import tensorflow as tf
+import numpy as np
+import matplotlib.pyplot as plt
 
 
 
-input_layer=tf.keras.layers.Input((1024,2))
-output_layer = tf.keras.layers.Conv1D(filters=4,padding='same',kernel_size=32)(input_layer)
-model=tf.keras.models.Model(inputs = input_layer,outputs=output_layer)
+gpu_path = ""
+xtrain = np.load(gpu_path+'data/feature_vectors_train_10knoise_SNR35.npy')
+ytrain = np.load(gpu_path+'data/labels_train_10knoise_SNR35.npy')
+btrain = np.load(gpu_path+'data/bit_signals_train_10knoise_SNR35.npy')
+sbtrain=np.load(gpu_path+'data/symbols_train_10knoise_SNR35.npy')
 
-model.summary()
+print(ytrain.shape)
 
+
+
+
+plt.plot(ytrain[0])
+plt.legend()
+plt.show()

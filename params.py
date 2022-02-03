@@ -4,8 +4,8 @@ from math import *
 
 class Params:
     
-    def __init__(self, Length=1e3, Bandwith=6, power_loss_db=0.2*1e-3, dispersion=17*1e-3, Gamma=1.27*1e-3,
-                 nsp=1, h=6.626*1e-34, lambda0=1.55*1e-6, T=200, N=2**5, number_symbols=3, p=0.5,M=16,
+    def __init__(self, Length=1000e3, Bandwith=10e9, power_loss_db=0.2*1e-3, dispersion=17*1e-6, Gamma=1.27*1e-6,
+                 nsp=1, h=6.626*1e-34, lambda0=1.55*1e-6, T=40, N=2**10, number_symbols=3, p=0.5,M=16,
                  nz=500):
         
         self.Length = Length
@@ -23,7 +23,10 @@ class Params:
         self.L0 = self.Length
         self.T0 = sqrt(abs(self.beta2)*self.L0 / 2)
         self.P0 = 2 / (self.Gamma * self.L0)
-        self.sigma02 = self.nsp * self.h * self.alpha * self.f0
+        #self.sigma02 = self.nsp * self.h * self.alpha * self.f0
+
+        self.sigma02 = 3.16e-20
+
         self.sigma2 = (self.sigma02 * self.L0) / (self.P0 * self.T0)
         self.M = M
 

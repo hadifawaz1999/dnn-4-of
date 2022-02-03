@@ -7,8 +7,8 @@ from data import DataGenerator
 
 class Channel:
 
-    def __init__(self, Length=1000*1e3, Bandwith=10*1e6, power_loss_db=0.2*1e-3, dispersion=17*1e6, Gamma=1.27*1e-3,
-                 nsp=1, h=6.626*1e-34, lambda0=1.55*1e-6, T=200, N=2**10, number_symbols=3, p=0.5,M=16):
+    def __init__(self, Length=1000*1e3, Bandwith=10*1e9, power_loss_db=0.2e-3, dispersion=17e-6, Gamma=1.27*1e-6,
+                 nsp=1, h=6.626*1e-34, lambda0=1.55*1e-6, T=65, N=2**11, number_symbols=3, p=0.5,M=16):
 
         self.Length = Length
         self.Bandwith = Bandwith
@@ -42,7 +42,7 @@ class Channel:
 
         )
 
-        self.data_generator.setter_noise0(sigma02=3.16*1e-17)
+        self.data_generator.setter_noise0(sigma02=3.16e-20)
         
         self.constellation = self.data_generator.Constellation
         self.Constellation = np.asarray([complex(self.constellation[i,0],
@@ -57,11 +57,14 @@ class Channel:
         self.q0t = self.data_generator.q0t
 
         self.sigma2 = self.data_generator.sigma2
+        self.sigma02 = self.data_generator.sigma02
 
         self.t = self.data_generator.t
 
         self.fft_frequencies = np.fft.fftfreq(
             n=self.N, d=self.data_generator.dt)
+
+    
 
     def setter_function(self, q0t):
 
@@ -174,7 +177,7 @@ class Channel:
             self.s_tilde.append(self.Constellation[index_min_distance])
             
         self.s_tilde = np.asarray(self.s_tilde)
-        
+
     
     def symb_to_bit(self):
         
@@ -228,7 +231,7 @@ class Channel:
             self.b_string.append(b_i)
         
         self.b_string = np.asarray(self.b_string)
-        
+
         return self.find_score_symbs(self.s,self.s_tilde) , self.find_score_bits(self.b_string,self.b_hat)
     
     def find_score_bits(self,a,b):

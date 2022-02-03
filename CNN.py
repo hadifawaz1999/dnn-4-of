@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 class CNN:
 
     def __init__(self, xtrain, ytrain, xtest, ytest, xvalidation, yvalidation,
-                 batch_size=1000, epochs=500, learning_rate=0.5,
+                 batch_size=500, epochs=100, learning_rate=0.1,
                  build_model=True, save_model=True, draw_model=True,
                  show_summary=True, show_verbose=True):
 
@@ -37,10 +37,12 @@ class CNN:
         self.input_layer = tf.keras.layers.Input(
             self.xtrain.shape[1:], name='Input')
 
-        self.residual1 = self.input_layer
+        self.bn = tf.keras.layers.BatchNormalization()(self.input_layer)
+
+        self.residual1 = self.bn
 
         self.conv1 = tf.keras.layers.Conv1D(
-            filters=2, kernel_size=32 ,padding='same',activation='relu', name='Conv1')(self.input_layer)
+            filters=2, kernel_size=32 ,padding='same',activation='relu', name='Conv1')(self.bn)
 
         self.conv2 = tf.keras.layers.Conv1D(
            filters=2,kernel_size=32,padding='same', activation='relu', name='Conv2')(self.conv1)
@@ -76,7 +78,7 @@ class CNN:
         self.my_model = tf.keras.models.Model(
             inputs=self.input_layer, outputs=self.output_layer)
 
-        self.my_loss = tf.keras.losses.MeanSquaredError()
+        self.my_loss = tf.keras.losses.MeanAbsoluteError()
 
         self.my_optimizer = tf.keras.optimizers.SGD(lr=self.learning_rate)
 

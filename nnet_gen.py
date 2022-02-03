@@ -11,12 +11,15 @@ class Generative_Model:
         
         self.params = params
         
+        self.sigma2 = 3.16e-20
+        
     def noise(self,n,sigma2):
         
         self.z = self.params.Length
         
         self.dz = self.z / self.params.nz
-        self.Pn = sigma2 * self.params.Bandwith * self.dz
+        self.Pn = sigma2 * self.params.Bandwith * self.z
+
         noise_real = np.random.normal(loc=0,scale=sqrt(self.Pn/2),size=n)
         noise_imag = np.random.normal(loc=0,scale=sqrt(self.Pn/2),size=n)
         
@@ -68,7 +71,7 @@ class Generative_Model:
             x = self.activation(x,dz)
             
             
-            x = x + self.noise(n=n,sigma2=self.params.sigma2)
+        x = x + self.noise(n=n,sigma2=self.sigma2)
     
         y = x
         
