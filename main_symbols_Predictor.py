@@ -17,20 +17,20 @@ from CNN_symbols import CNN_symbols
 
 gpu_path = ''
 
-xtrain = np.load(gpu_path+'data/feature_vectors_train_10knoise_SNR35.npy')
-ytrain = np.load(gpu_path+'data/labels_train_10knoise_SNR35.npy')
-btrain = np.load(gpu_path+'data/bit_signals_train_10knoise_SNR35.npy')
-sbtrain=np.load(gpu_path+'data/symbols_train_10knoise_SNR35.npy')
+xtrain = np.load(gpu_path+'data/feature_vectors_train_10knoise_SNR35_10.npy')
+ytrain = np.load(gpu_path+'data/labels_train_10knoise_SNR35_10.npy')
+btrain = np.load(gpu_path+'data/bit_signals_train_10knoise_SNR35_10.npy')
+sbtrain=np.load(gpu_path+'data/symbols_train_10knoise_SNR35_10.npy')
 
-xtest = np.load(gpu_path+'data/feature_vectors_test_10knoise_SNR35.npy')
-ytest = np.load(gpu_path+'data/labels_test_10knoise_SNR35.npy')
-btest = np.load(gpu_path+'data/bit_signals_test_10knoise_SNR35.npy')
-sbtest=np.load(gpu_path+'data/symbols_test_10knoise_SNR35.npy')
+xtest = np.load(gpu_path+'data/feature_vectors_test_10knoise_SNR35_10.npy')
+ytest = np.load(gpu_path+'data/labels_test_10knoise_SNR35_10.npy')
+btest = np.load(gpu_path+'data/bit_signals_test_10knoise_SNR35_10.npy')
+sbtest=np.load(gpu_path+'data/symbols_test_10knoise_SNR35_10.npy')
 
-xvalidation = np.load(gpu_path+'data/feature_vectors_val_10knoise_SNR35.npy')
-yvalidation = np.load(gpu_path+'data/labels_val_10knoise_SNR35.npy')
-bvalidation = np.load(gpu_path+'data/bit_signals_val_10knoise_SNR35.npy')
-sbval=np.load(gpu_path+'data/symbols_val_10knoise_SNR35.npy')
+xvalidation = np.load(gpu_path+'data/feature_vectors_val_10knoise_SNR35_10.npy')
+yvalidation = np.load(gpu_path+'data/labels_val_10knoise_SNR35_10.npy')
+bvalidation = np.load(gpu_path+'data/bit_signals_val_10knoise_SNR35_10.npy')
+sbval=np.load(gpu_path+'data/symbols_val_10knoise_SNR35_10.npy')
 
 
 sbtrain.shape = (-1,64)
@@ -93,9 +93,5 @@ for i in range(len(ypred)):
 BER = np.mean(np.abs(b_hat - bvalidation))
 
 # BER = np.mean(np.abs(b_hat - btrain))
-
-
-print(sbval)
-print(ypred)
 
 print(BER)

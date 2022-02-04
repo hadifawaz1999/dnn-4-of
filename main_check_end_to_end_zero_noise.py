@@ -4,8 +4,8 @@ from channel import Channel
 
 Bandwith = 10*1e9
 L = 1000*1e3
-T = 65
-N = 2**11
+T = 40
+N = 2**10
 p = 0.5
 Nb = 32*4
 M=16
