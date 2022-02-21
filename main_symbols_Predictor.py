@@ -17,17 +17,17 @@ from CNN_symbols import CNN_symbols
 
 gpu_path = ''
 
-xtrain = np.load(gpu_path+'data/feature_vectors_train_10knoise_SNR35_10.npy')
+xtrain = np.load(gpu_path+'data/feature_vectors_train_10knoise_SNR35_10_PCA.npy')
 ytrain = np.load(gpu_path+'data/labels_train_10knoise_SNR35_10.npy')
 btrain = np.load(gpu_path+'data/bit_signals_train_10knoise_SNR35_10.npy')
 sbtrain=np.load(gpu_path+'data/symbols_train_10knoise_SNR35_10.npy')
 
-xtest = np.load(gpu_path+'data/feature_vectors_test_10knoise_SNR35_10.npy')
+xtest = np.load(gpu_path+'data/feature_vectors_test_10knoise_SNR35_10_PCA.npy')
 ytest = np.load(gpu_path+'data/labels_test_10knoise_SNR35_10.npy')
 btest = np.load(gpu_path+'data/bit_signals_test_10knoise_SNR35_10.npy')
 sbtest=np.load(gpu_path+'data/symbols_test_10knoise_SNR35_10.npy')
 
-xvalidation = np.load(gpu_path+'data/feature_vectors_val_10knoise_SNR35_10.npy')
+xvalidation = np.load(gpu_path+'data/feature_vectors_val_10knoise_SNR35_10_PCA.npy')
 yvalidation = np.load(gpu_path+'data/labels_val_10knoise_SNR35_10.npy')
 bvalidation = np.load(gpu_path+'data/bit_signals_val_10knoise_SNR35_10.npy')
 sbval=np.load(gpu_path+'data/symbols_val_10knoise_SNR35_10.npy')
@@ -36,13 +36,6 @@ sbval=np.load(gpu_path+'data/symbols_val_10knoise_SNR35_10.npy')
 sbtrain.shape = (-1,64)
 sbtest.shape = (-1,64)
 sbval.shape = (-1,64)
-
-#xtrain[:,:,0] = (xtrain[:,:,0] - np.mean(xtrain[:,:,0],axis=1,keepdims=True)) / np.std(xtrain[:,:,0],axis=1,keepdims=True)
-#xvalidation[:,:,0] = (xvalidation[:,:,0] - np.mean(xvalidation[:,:,0],axis=1,keepdims=True)) / np.std(xvalidation[:,:,0],axis=1,keepdims=True)
-#xtest[:,:,0] = (xtest[:,:,0] - np.mean(xtest[:,:,0],axis=1,keepdims=True)) / np.std(xtest[:,:,0],axis=1,keepdims=True)
-#xtrain[:,:,1] = (xtrain[:,:,1] - np.mean(xtrain[:,:,1],axis=1,keepdims=True)) / np.std(xtrain[:,:,1],axis=1,keepdims=True)
-#xvalidation[:,:,1] = (xvalidation[:,:,1] - np.mean(xvalidation[:,:,1],axis=1,keepdims=True)) / np.std(xvalidation[:,:,1],axis=1,keepdims=True)
-#xtest[:,:,1] = (xtest[:,:,1] - np.mean(xtest[:,:,1],axis=1,keepdims=True)) / np.std(xtest[:,:,1],axis=1,keepdims=True)
 
 print(np.mean(xtrain[0,:,0]),np.std(xtrain[0,:,0]))
 
