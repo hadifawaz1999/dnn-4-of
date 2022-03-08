@@ -3,12 +3,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-gpu_path = '/app/'
+gpu_path = '../'
 
 class FFN:
 
     def __init__(self, xtrain, ytrain, xtest, ytest, xvalidation, yvalidation,
-                 batch_size=400, epochs=200, learning_rate=2,
+                 batch_size=400, epochs=200, learning_rate=1,
                  build_model=True, save_model=True, draw_model=True,
                  show_summary=False, show_verbose=True):
 
@@ -69,9 +69,9 @@ class FFN:
 
             self.my_model.summary()
         
-        #if self.draw_model:
+        if self.draw_model:
             
-            #tf.keras.utils.plot_model(self.my_model,gpu_path+'Predictors/FFN/FFN.png',show_shapes=True)
+            tf.keras.utils.plot_model(self.my_model,gpu_path+'Predictors/FFN/FFN.png',show_shapes=True)
 
     def fit(self):
 

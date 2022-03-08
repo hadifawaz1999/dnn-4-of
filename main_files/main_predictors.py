@@ -13,30 +13,25 @@ from data import DataGenerator
 import matplotlib.pyplot as plt
 from Models_pred.CNN import CNN
 
-# feature_vectors = np.load(file='/app/data/feature_vectors_10knoise.npy')
-# bit_signals = np.load(file='/app/data/bit_signals_10knoise.npy')
-# labels = np.load(file='/app/data/labels_10knoise.npy')
-
-# print(feature_vectors.shape)
-# print(labels.shape)
-
-gpu_path='/app/'
 
 
-xtrain = np.load(gpu_path+'data/feature_vectors_train_10knoise.npy')
-ytrain = np.load(gpu_path+'data/labels_train_10knoise.npy')
-btrain = np.load(gpu_path+'data/bit_signals_train_10knoise.npy')
-sbtrain=np.load(gpu_path+'data/symbols_train_10knoise.npy')
+gpu_path='../'
 
-xtest = np.load(gpu_path+'data/feature_vectors_test_10knoise.npy')
-ytest = np.load(gpu_path+'data/labels_test_10knoise.npy')
-btest = np.load(gpu_path+'data/bit_signals_test_10knoise.npy')
-sbtest=np.load(gpu_path+'data/symbols_test_10knoise.npy')
 
-xvalidation = np.load(gpu_path+'data/feature_vectors_val_10knoise.npy')
-yvalidation = np.load(gpu_path+'data/labels_val_10knoise.npy')
-bvalidation = np.load(gpu_path+'data/bit_signals_val_10knoise.npy')
-sbval=np.load(gpu_path+'data/symbols_val_10knoise.npy')
+xtrain = np.load(gpu_path+'data/feature_vectors_train_10knoise_SNR35_10.npy')
+ytrain = np.load(gpu_path+'data/labels_train_10knoise_SNR35_10.npy')
+btrain = np.load(gpu_path+'data/bit_signals_train_10knoise_SNR35_10.npy')
+sbtrain=np.load(gpu_path+'data/symbols_train_10knoise_SNR35_10.npy')
+
+xtest = np.load(gpu_path+'data/feature_vectors_test_10knoise_SNR35_10.npy')
+ytest = np.load(gpu_path+'data/labels_test_10knoise_SNR35_10.npy')
+btest = np.load(gpu_path+'data/bit_signals_test_10knoise_SNR35_10.npy')
+sbtest=np.load(gpu_path+'data/symbols_test_10knoise_SNR35_10.npy')
+
+xvalidation = np.load(gpu_path+'data/feature_vectors_val_10knoise_SNR35_10.npy')
+yvalidation = np.load(gpu_path+'data/labels_val_10knoise_SNR35_10.npy')
+bvalidation = np.load(gpu_path+'data/bit_signals_val_10knoise_SNR35_10.npy')
+sbval=np.load(gpu_path+'data/symbols_val_10knoise_SNR35_10.npy')
 
 
 ffn = CNN(xtrain=xtrain,ytrain=ytrain,xtest=xtest,ytest=ytest,
@@ -52,11 +47,11 @@ print("score = ",ffn.evaluation())
 
 ypred = ffn.ypred
 
-optic_fiber_channel = Channel(number_symbols=32,N=2**11,T=40,Length=1000e3,Bandwith=10e9)
+optic_fiber_channel = Channel(number_symbols=32,N=2**10,T=40,Length=1000e3,Bandwith=10e9)
 
 print(ypred.shape)
 
-ypred.shape = (-1,2**11,2)
+ypred.shape = (-1,2**10,2)
 
 print(ypred.shape)
 
@@ -84,6 +79,13 @@ for i in range(len(ypred)):
 
     b_hat.append(np.asarray(b_tilde))
     
-BER = np.mean(np.abs(b_hat - bvalidation))
+BER = np.mean(np.abs(b_hat - btest))
 
-print(BER)
+def hb_p(p):
+    
+    return -p*np.log2(p)-(1-p)*np.log2(1-p)
+
+MI= 1-hb_p(BER)
+
+print("BER :", BER)
+print("Mutual Information", MI)

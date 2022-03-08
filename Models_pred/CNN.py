@@ -3,12 +3,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-gpu_path = '/app/'
+gpu_path = '../'
 
 class CNN:
 
     def __init__(self, xtrain, ytrain, xtest, ytest, xvalidation, yvalidation,
-                 batch_size=500, epochs=100, learning_rate=0.1,
+                 batch_size=300, epochs=200, learning_rate=1,
                  build_model=True, save_model=True, draw_model=True,
                  show_summary=True, show_verbose=True):
 
@@ -39,12 +39,10 @@ class CNN:
         self.input_layer = tf.keras.layers.Input(
             self.xtrain.shape[1:], name='Input')
 
-        self.bn = tf.keras.layers.BatchNormalization()(self.input_layer)
-
-        self.residual1 = self.bn
+        self.residual1 = self.input_layer
 
         self.conv1 = tf.keras.layers.Conv1D(
-            filters=2, kernel_size=32 ,padding='same',activation='relu', name='Conv1')(self.bn)
+            filters=2, kernel_size=32 ,padding='same',activation='relu', name='Conv1')(self.input_layer)
 
         self.conv2 = tf.keras.layers.Conv1D(
            filters=2,kernel_size=32,padding='same', activation='relu', name='Conv2')(self.conv1)
@@ -54,28 +52,11 @@ class CNN:
         )(self.residual1)
 
         self.results1 = tf.keras.layers.add([self.conv2,self.residual1])
+        
+        self.flatten1 = tf.keras.layers.Flatten()(self.results1)
 
-
-        self.conv3 = tf.keras.layers.Conv1D(
-           filters=2,kernel_size=32,padding='same', activation='tanh', name='Conv3')(self.results1)
-
-        self.conv4 = tf.keras.layers.Conv1D(
-           filters=2,kernel_size=32,padding='same', activation='tanh', name='Conv4')(self.conv3)
-
-
-
-        self.residual2 = tf.keras.layers.Conv1D(
-            filters=2, kernel_size=1,name='residualConnection2'
-        )(self.results1)
-
-        self.results2 = tf.keras.layers.add([self.conv4,self.residual2])
-
-        self.flatten1 = tf.keras.layers.Flatten(name='Flatten1')(self.results2)
-
-        self.output_layer = self.flatten1
-
-        #self.output_layer = tf.keras.layers.Dense(
-         #   units=self.N*2, activation='linear', name='Output')(self.flatten1)
+        self.output_layer = tf.keras.layers.Dense(
+           units=self.N*2, activation='linear', name='Output')(self.flatten1)
 
         self.my_model = tf.keras.models.Model(
             inputs=self.input_layer, outputs=self.output_layer)
@@ -119,8 +100,8 @@ class CNN:
         
     def evaluation(self):
         
-        self.ypred = self.my_model.predict(self.xvalidation)
+        self.ypred = self.my_model.predict(self.xtest)
         
-        self.error = np.mean((self.yvalidation - self.ypred)**2)
+        self.error = np.mean((self.ytest - self.ypred)**2)
         
         return self.error

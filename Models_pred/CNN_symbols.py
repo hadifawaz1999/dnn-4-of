@@ -9,12 +9,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 from custom_loss_function import constellation_loss_function
 
-gpu_path = ''
+gpu_path = '../'
 
 class CNN_symbols:
 
     def __init__(self, xtrain, ytrain, xtest, ytest, xvalidation, yvalidation,
-                 batch_size=300, epochs=200, learning_rate=0.1,
+                 batch_size=300, epochs=100, learning_rate=0.1,
                  build_model=True, save_model=True, draw_model=True,
                  show_summary=True, show_verbose=True):
 
@@ -133,11 +133,11 @@ class CNN_symbols:
         
     def evaluation(self):
         
-        self.ypred = self.my_model.predict(self.xvalidation)
+        self.ypred = self.my_model.predict(self.xtest)
         
         self.ypred_train = self.my_model.predict(self.xtrain)
         
-        self.error = np.mean((self.yvalidation - self.ypred)**2)
+        self.error = np.mean((self.ytest - self.ypred)**2)
         
         self.error_train = np.mean((self.ytrain - self.ypred_train)**2)
         
